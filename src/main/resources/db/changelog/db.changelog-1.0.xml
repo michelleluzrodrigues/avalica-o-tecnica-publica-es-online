@@ -5,8 +5,13 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <!-- Criação da tabela "processo" -->
+    <!-- Criação da tabela "processo" -->
     <changeSet id="1" author="you">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="processo"/>
+            </not>
+        </preConditions>
         <createTable tableName="processo">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -17,8 +22,13 @@
         </createTable>
     </changeSet>
 
-    <!-- Criação da tabela "reu" -->
+    <!-- Criação da tabela "reu" -->
     <changeSet id="2" author="you">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="reu"/>
+            </not>
+        </preConditions>
         <createTable tableName="reu">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
