@@ -3,7 +3,8 @@ package com.example.processos.controller;
 import com.example.processos.exception.ReuAlreadyExistsException;
 import com.example.processos.exception.ReuNotFoundException;
 import com.example.processos.model.Reu;
-import com.example.processos.service.ReuService;
+import com.example.processos.service.GetReuService;
+import com.example.processos.service.SaveReuService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,16 +18,24 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class ReuControllerTest {
 
     private MockMvc mockMvc;
 
     @Mock
-    private ReuService reuService;
+    private SaveReuService saveReuService;
+    @Mock
+    private GetReuService getReuService;
 
     @InjectMocks
     private ReuController reuController;
@@ -39,10 +48,10 @@ class ReuControllerTest {
 
     @Test
     void testAddReuToProcesso() throws Exception {
-        Reu reu = new Reu(null, null, null);
+        Reu reu = new Reu();
         reu.setNome("João Silva");
 
-        when(reuService.saveReu(any(Long.class), any(Reu.class))).thenReturn(reu);
+        when(saveReuService.saveReu(any(Long.class), any(Reu.class))).thenReturn(reu);
 
         mockMvc.perform(post("/processos/1/reus")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -53,10 +62,10 @@ class ReuControllerTest {
 
     @Test
     void testAddReuToProcessoAlreadyExists() throws Exception {
-        Reu reu = new Reu(null, null, null);
+        Reu reu = new Reu();
         reu.setNome("João Silva");
 
-        when(reuService.saveReu(any(Long.class), any(Reu.class)))
+        when(saveReuService.saveReu(any(Long.class), any(Reu.class)))
                 .thenThrow(new ReuAlreadyExistsException("João Silva", 1L));
 
         mockMvc.perform(post("/processos/1/reus")
@@ -74,7 +83,7 @@ class ReuControllerTest {
         Reu reu2 = new Reu();
         reu2.setNome("Maria Souza");
 
-        when(reuService.getReusByProcessoId(1L)).thenReturn(Arrays.asList(reu1, reu2));
+        when(getReuService.getReusByProcessoId(1L)).thenReturn(Arrays.asList(reu1, reu2));
 
         mockMvc.perform(get("/processos/1/reus"))
                 .andExpect(status().isOk())
@@ -84,7 +93,7 @@ class ReuControllerTest {
 
     @Test
     void testDeleteReu() throws Exception {
-        doNothing().when(reuService).deleteReu(1L);
+        doNothing().when(saveReuService).deleteReu(1L);
 
         mockMvc.perform(delete("/processos/1/reus/1"))
                 .andExpect(status().isNoContent());
@@ -92,7 +101,7 @@ class ReuControllerTest {
 
     @Test
     void testDeleteReuNotFound() throws Exception {
-        doThrow(new ReuNotFoundException(1L)).when(reuService).deleteReu(1L);
+        doThrow(new ReuNotFoundException(1L)).when(saveReuService).deleteReu(1L);
 
         mockMvc.perform(delete("/processos/1/reus/1"))
                 .andExpect(status().isNotFound())

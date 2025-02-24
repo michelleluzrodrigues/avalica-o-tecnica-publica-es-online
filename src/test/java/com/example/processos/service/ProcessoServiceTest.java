@@ -24,7 +24,9 @@ class ProcessoServiceTest {
     private ProcessoRepository processoRepository;
 
     @InjectMocks
-    private ProcessoService processoService;
+    private SaveProcessoService saveProcessoService;
+    @InjectMocks
+    private GetProcessoService getProcessoService;
 
     @BeforeEach
     void setUp() {
@@ -33,13 +35,13 @@ class ProcessoServiceTest {
 
     @Test
     void testSaveProcesso() {
-        Processo processo = new Processo(null, null, null);
+        Processo processo = new Processo();
         processo.setNumeroProcesso("12345");
 
         when(processoRepository.existsByNumeroProcesso("12345")).thenReturn(false);
         when(processoRepository.save(any(Processo.class))).thenReturn(processo);
 
-        Processo savedProcesso = processoService.saveProcesso(processo);
+        Processo savedProcesso = saveProcessoService.saveProcesso(processo);
         assertNotNull(savedProcesso);
         assertEquals("12345", savedProcesso.getNumeroProcesso());
     }
@@ -52,7 +54,7 @@ class ProcessoServiceTest {
         when(processoRepository.existsByNumeroProcesso("12345")).thenReturn(true);
 
         assertThrows(ProcessoAlreadyExistsException.class, () -> {
-            processoService.saveProcesso(processo);
+            saveProcessoService.saveProcesso(processo);
         });
     }
 
@@ -66,7 +68,7 @@ class ProcessoServiceTest {
 
         when(processoRepository.findAll()).thenReturn(Arrays.asList(processo1, processo2));
 
-        List<Processo> processos = processoService.getAllProcessos();
+        List<Processo> processos = getProcessoService.getAllProcessos();
         assertEquals(2, processos.size());
     }
 
@@ -78,7 +80,7 @@ class ProcessoServiceTest {
 
         when(processoRepository.findById(1L)).thenReturn(Optional.of(processo));
 
-        Processo foundProcesso = processoService.getProcessoById(1L);
+        Processo foundProcesso = getProcessoService.getProcessoById(1L);
         assertNotNull(foundProcesso);
         assertEquals("12345", foundProcesso.getNumeroProcesso());
     }
@@ -88,7 +90,7 @@ class ProcessoServiceTest {
         when(processoRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(ProcessoNotFoundException.class, () -> {
-            processoService.getProcessoById(1L);
+            getProcessoService.getProcessoById(1L);
         });
     }
 
@@ -97,7 +99,7 @@ class ProcessoServiceTest {
         when(processoRepository.existsById(1L)).thenReturn(true);
         doNothing().when(processoRepository).deleteById(1L);
 
-        processoService.deleteProcesso(1L);
+        saveProcessoService.deleteProcesso(1L);
         verify(processoRepository, times(1)).deleteById(1L);
     }
 
@@ -106,7 +108,7 @@ class ProcessoServiceTest {
         when(processoRepository.existsById(1L)).thenReturn(false);
 
         assertThrows(ProcessoNotFoundException.class, () -> {
-            processoService.deleteProcesso(1L);
+            saveProcessoService.deleteProcesso(1L);
         });
     }
 }

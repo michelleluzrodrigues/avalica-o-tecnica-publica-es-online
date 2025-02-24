@@ -1,0 +1,182 @@
+{
+	"info": {
+		"_postman_id": "f44f0321-ded1-464a-bb04-9abe0602c82f",
+		"name": "New Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42549719"
+	},
+	"item": [
+		{
+			"name": "inserirprocesso",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"numeroProcesso\": \"1234446\",\r\n    \"reus\":[\r\n        {\r\n            \"nome\": \"Maria\",\r\n            \"cpf\": \"07908891969\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/processos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"processos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllProcessos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/processos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"processos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getProcessoById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/processos/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"processos",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteProcesso",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/processos/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"processos",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addReuToProcesso",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"cpf\":\"07908891969\",\r\n    \"nome\":\"Lucas\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/processos/121/reus",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"processos",
+						"121",
+						"reus"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getReusByProcessoId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/processos/:processoId/reus",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"processos",
+						":processoId",
+						"reus"
+					],
+					"variable": [
+						{
+							"key": "processoId",
+							"value": "121"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteReu",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/processos/::processoId/reus/203",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"processos",
+						"::processoId",
+						"reus",
+						"203"
+					],
+					"variable": [
+						{
+							"key": ":processoId",
+							"value": "121"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -2,7 +2,6 @@ package com.example.processos.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,37 +13,41 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.processos.dto.ProcessoDto;
 import com.example.processos.exception.ProcessoAlreadyExistsException;
 import com.example.processos.exception.ProcessoNotFoundException;
-import com.example.processos.model.Processo;
-import com.example.processos.service.ProcessoService;
+import com.example.processos.service.GetProcessoService;
+import com.example.processos.service.SaveProcessoService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/processos")
+@RequiredArgsConstructor
 public class ProcessoController {
 
-    @Autowired
-    private ProcessoService processoService;
+    private final SaveProcessoService saveProcessoService;
+    private final GetProcessoService getProcessoService;
 
     @PostMapping
-    public ResponseEntity<Processo> saveProcesso(@RequestBody Processo processo) {
-        return ResponseEntity.ok(processoService.saveProcesso(processo));
+    public ResponseEntity<ProcessoDto> saveProcesso(@RequestBody ProcessoDto processoDto) {
+        return ResponseEntity.ok(ProcessoDto.toDto(saveProcessoService.saveProcesso(ProcessoDto.toDomain(processoDto))));
     }
 
     @GetMapping
-    public ResponseEntity<List<Processo>> getAllProcessos() {
-        return ResponseEntity.ok(processoService.getAllProcessos());
+    public ResponseEntity<List<ProcessoDto>> getAllProcessos() {
+        return ResponseEntity.ok(getProcessoService.getAllProcessos().stream().map(ProcessoDto::toDto).toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Processo> getProcessoById(@PathVariable Long id) {
-        return ResponseEntity.ok(processoService.getProcessoById(id));
+    public ResponseEntity<ProcessoDto> getProcessoById(@PathVariable Long id) {
+        return ResponseEntity.ok(ProcessoDto.toDto(getProcessoService.getProcessoById(id)));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProcesso(@PathVariable Long id) {
-        processoService.deleteProcesso(id);
-        return ResponseEntity.noContent().build();
+        saveProcessoService.deleteProcesso(id);
+        return ResponseEntity.ok(null);
     }
 
     @ExceptionHandler(ProcessoAlreadyExistsException.class)

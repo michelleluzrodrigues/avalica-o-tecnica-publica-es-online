@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <!-- Criação da tabela "processo" -->
+    <!-- Criação da tabela "processo" -->
     <changeSet id="1" author="you">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -22,7 +22,7 @@
         </createTable>
     </changeSet>
 
-    <!-- Criação da tabela "reu" -->
+    <!-- Criação da tabela "reu" -->
     <changeSet id="2" author="you">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -32,6 +32,9 @@
         <createTable tableName="reu">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cpf" type="char(11)">
+                <constraints nullable="false"/>
             </column>
             <column name="nome" type="varchar(255)">
                 <constraints nullable="false"/>

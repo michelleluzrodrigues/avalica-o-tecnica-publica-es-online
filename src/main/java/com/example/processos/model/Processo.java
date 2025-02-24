@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Processo {
 
     @Id
@@ -27,7 +29,7 @@ public class Processo {
     @Column(unique = true, nullable = false)
     private String numeroProcesso;
 
-    @OneToMany(mappedBy = "processo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "processo", orphanRemoval = true)
     private List<Reu> reus = new ArrayList<>();
 
 

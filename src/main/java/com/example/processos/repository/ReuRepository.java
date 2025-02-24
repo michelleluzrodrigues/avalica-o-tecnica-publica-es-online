@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface ReuRepository extends JpaRepository<Reu, Long> {
     List<Reu> findByProcessoId(Long processoId);
-    boolean existsByNomeAndProcessoId(String nome, Long processoId);
+    boolean existsByCpfAndProcessoId(String nome, Long processoId);
 }
